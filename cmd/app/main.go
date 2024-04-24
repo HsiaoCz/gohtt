@@ -7,6 +7,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/HsiaoCz/gohtt/handlers"
 	"github.com/go-chi/chi/v5"
 	"github.com/joho/godotenv"
 )
@@ -16,7 +17,7 @@ func main() {
 		log.Fatal(err)
 	}
 	router := chi.NewMux()
-	router.Get("/foo", handleFoo)
+	router.Get("/foo", handlers.TransferHandlerFunc(handlers.HandleFoo))
 	listenAddr := os.Getenv("LISTEN_ADDR")
 	slog.Info("HTTP server started", "listenAddr", listenAddr)
 	srv := http.Server{
@@ -29,8 +30,4 @@ func main() {
 		slog.Error("http server run error", "err", err)
 		return
 	}
-}
-
-func handleFoo(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("foo"))
 }
